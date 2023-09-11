@@ -24,6 +24,8 @@ type ListOps[T comparable] interface {
 	Search(element T) (int, *MyError)
 	Size() int
 	Append(v T)
+	Get(position int) *Node[T]
+	Swap(i, j int) *MyError
 }
 
 type MyError struct {
@@ -32,6 +34,82 @@ type MyError struct {
 
 func (e *MyError) Error() string {
 	return fmt.Sprintf("An error ecurred: %s", e.What)
+}
+
+func (l *List[T]) Get(position int) *Node[T] {
+	if position < 0 || position >= l.Size() {
+		return nil
+	}
+
+	node := l.head
+	for i := 0; i < position; i++ {
+		node = node.next
+	}
+	return node
+}
+
+func (l *List[T]) Swap(i, j int) *MyError {
+	if i < 0 || i >= l.Size() || j < 0 || j >= l.Size() {
+		return &MyError{"Index out of range"}
+	}
+
+	if i == j {
+		return nil
+	}
+
+	var node1, node2 *Node[T]
+	if i < j {
+		node1 = l.Get(i)
+		node2 = l.Get(j)
+	} else {
+		node1 = l.Get(j)
+		node2 = l.Get(i)
+	}
+
+	if node1 == nil || node2 == nil {
+		return &MyError{"Index out of range"}
+	}
+
+	if node1.next == node2 {
+		// node1 is before node2
+		if node1.prev != nil {
+			node1.prev.next = node2
+		}
+		node2.prev = node1.prev
+		node1.next = node2.next
+		node2.next = node1
+		node1.prev = node2
+		if node1.next != nil {
+			node1.next.prev = node1
+		}
+	} else {
+		// node1 is after node2
+		if node2.prev != nil {
+			node2.prev.next = node1
+		}
+		node1.prev = node2.prev
+		node2.next = node1.next
+		node1.next = node2
+		node2.prev = node1
+		if node2.next != nil {
+			node2.next.prev = node2
+		}
+	}
+
+	if node1.prev == nil {
+		l.head = node1
+	}
+	if node2.prev == nil {
+		l.head = node2
+	}
+	if node1.next == nil {
+		l.tail = node1
+	}
+	if node2.next == nil {
+		l.tail = node2
+	}
+
+	return nil
 }
 
 func (l *Node[T]) getNext() (T, *MyError) {
@@ -153,13 +231,13 @@ func (l *List[T]) Search(element T) (int, *MyError) {
 	return zero, &MyError{"Element not found"}
 }
 
-func PrintList[T comparable](list *List[T]) {
+func PrintList[T comparable](list ListOps[T]) {
 	if list == nil {
 		return
 	}
 	fmt.Println("List size : ", list.Size())
 
-	node := list.head // head node
+	node := list.Get(0) // head node
 	for i := 0; i < list.Size(); i++ {
 		fmt.Printf("Node %d is %v\n", i, node.val)
 		node = node.next

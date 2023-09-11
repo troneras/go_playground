@@ -39,9 +39,9 @@ func TestAppend(t *testing.T) {
 			if list.Size() != len(test.expected) {
 				t.Errorf("Expected list size to be 7, got %d", list.Size())
 			}
-			actual := listToSlice(list)
+			actual := ListToSlice(list)
 
-			if !sliceEqual(test.expected, actual) {
+			if !SliceEqual(test.expected, actual) {
 				t.Errorf("Expected %v, got %v", test.expected, actual)
 			}
 		})
@@ -92,8 +92,8 @@ func TestInsert(t *testing.T) {
 				}
 			}
 
-			actual := listToSlice(list)
-			if !sliceEqual(v.expected, actual) {
+			actual := ListToSlice(list)
+			if !SliceEqual(v.expected, actual) {
 				t.Errorf("Expected %v, got %v", v.expected, actual)
 			}
 		})
@@ -167,17 +167,17 @@ func TestDelete(t *testing.T) {
 				t.Errorf("Expected list size to be 3, got %d", list.Size())
 			}
 
-			actual := listToSlice(list)
-			if !sliceEqual(v.expected, actual) {
+			actual := ListToSlice(list)
+			if !SliceEqual(v.expected, actual) {
 				t.Errorf("Expected %v, got %v", v.expected, actual)
 			}
 		})
 	}
 }
 
-func listToSlice[T comparable](list *List[T]) []T {
+func ListToSlice[T comparable](list ListOps[T]) []T {
 	var result []T
-	node := list.head
+	node := list.Get(0)
 	for node != nil {
 		result = append(result, node.val)
 		node = node.next
@@ -185,7 +185,7 @@ func listToSlice[T comparable](list *List[T]) []T {
 	return result
 }
 
-func sliceEqual[T comparable](a, b []T) bool {
+func SliceEqual[T comparable](a, b []T) bool {
 	if len(a) != len(b) {
 		return false
 	}
