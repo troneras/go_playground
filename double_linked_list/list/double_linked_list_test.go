@@ -21,6 +21,7 @@ func TestAppend(t *testing.T) {
 	}
 
 	for _, test := range tests {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel() // marks the test case as capable of running in parallel
 
@@ -71,6 +72,7 @@ func TestInsert(t *testing.T) {
 	}
 
 	for _, v := range tests {
+		v := v
 		t.Run(v.name, func(t *testing.T) {
 			t.Parallel()
 			list := MakeList(v.initial)
@@ -121,6 +123,7 @@ func TestSearch(t *testing.T) {
 	}
 
 	for _, v := range tests {
+		v := v
 		t.Run(v.name, func(t *testing.T) {
 			t.Parallel()
 			list := MakeList(v.initial)
@@ -151,6 +154,7 @@ func TestDelete(t *testing.T) {
 	}
 
 	for _, v := range tests {
+		v := v
 		t.Run(v.name, func(t *testing.T) {
 			t.Parallel()
 			list := MakeList(v.initial)
