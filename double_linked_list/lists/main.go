@@ -26,22 +26,6 @@ func (e *MyError) Error() string {
 	return fmt.Sprintf("An error ecurred: %s", e.What)
 }
 
-func (l *Node[T]) getNext() (T, *MyError) {
-	if l.next != nil {
-		return l.next.val, nil
-	}
-	var zero T
-	return zero, &MyError{"No next element"}
-}
-
-func (l *Node[T]) hasNext() bool {
-	return l != nil && l.next != nil
-}
-
-func (l *Node[T]) hasPrev() bool {
-	return l != nil && l.prev != nil
-}
-
 func (l *List[T]) Size() int {
 	return l.size
 }
@@ -233,12 +217,12 @@ func main() {
 	}
 
 	// search method
-	var pos int
-	pos, err = list.Search(5)
-	if pos, err = list.Search(5); err != nil {
-		fmt.Println(err)
-	} else {
+	pos, search_error := list.Search(5)
+
+	if search_error == nil {
 		fmt.Println("Element 5 is at position ", pos)
+	} else {
+		fmt.Println(search_error)
 	}
 
 	// reverse method
