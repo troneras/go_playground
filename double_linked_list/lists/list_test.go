@@ -21,6 +21,7 @@ func TestAppend(t *testing.T) {
 	}
 
 	for _, test := range tests {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel() // marks the test case as capable of running in parallel
 
@@ -49,7 +50,7 @@ func TestAppend(t *testing.T) {
 
 func TestInsert(t *testing.T) {
 	tests := []struct {
-		name	 string
+		name    string
 		initial []int
 		insert  []struct {
 			value    int
@@ -62,7 +63,7 @@ func TestInsert(t *testing.T) {
 		expected []int
 	}{
 		{
-			name:	 "Insert 100, 200, 300, 400",
+			name:     "Insert 100, 200, 300, 400",
 			initial:  []int{1, 2, 3, 4, 5},
 			insert:   []struct{ value, position int }{{100, 0}, {200, 2}, {300, 5}, {400, 7}},
 			search:   []struct{ value, position int }{{100, 0}, {200, 2}, {300, 5}, {400, 7}},
@@ -71,6 +72,7 @@ func TestInsert(t *testing.T) {
 	}
 
 	for _, v := range tests {
+		v := v
 		t.Run(v.name, func(t *testing.T) {
 			t.Parallel()
 			list := makeList(v.initial)
@@ -93,14 +95,14 @@ func TestInsert(t *testing.T) {
 			actual := listToSlice(list)
 			if !sliceEqual(v.expected, actual) {
 				t.Errorf("Expected %v, got %v", v.expected, actual)
-			}		
+			}
 		})
-	}	
+	}
 }
 
 func TestSearch(t *testing.T) {
 	tests := []struct {
-		name   string
+		name    string
 		initial []int
 		search  []struct {
 			value    int
@@ -108,7 +110,7 @@ func TestSearch(t *testing.T) {
 		}
 	}{
 		{
-			name:   "Search 1, 2, 3, 4, 5",
+			name:    "Search 1, 2, 3, 4, 5",
 			initial: []int{1, 2, 3, 4, 5},
 			search: []struct{ value, position int }{
 				{1, 0},
@@ -121,6 +123,7 @@ func TestSearch(t *testing.T) {
 	}
 
 	for _, v := range tests {
+		v := v
 		t.Run(v.name, func(t *testing.T) {
 			t.Parallel()
 			list := makeList(v.initial)
@@ -137,13 +140,13 @@ func TestSearch(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 	tests := []struct {
-		name	 string
+		name     string
 		initial  []int
 		delete   []int
 		expected []int
 	}{
 		{
-			name:	 "Delete 0, 2, 3",
+			name:     "Delete 0, 2, 3",
 			initial:  []int{1, 2, 3, 4, 5},
 			delete:   []int{0, 2, 3},
 			expected: []int{2, 3, 5},
@@ -151,6 +154,7 @@ func TestDelete(t *testing.T) {
 	}
 
 	for _, v := range tests {
+		v := v
 		t.Run(v.name, func(t *testing.T) {
 			t.Parallel()
 			list := makeList(v.initial)
